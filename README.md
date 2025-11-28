@@ -1,96 +1,114 @@
-# Agentic Math Solver  🧠
+# 🧠 Agentic Math Solver
 
-An intelligent AI Math Tutor built with **LangGraph**, **FastAPI**, **React**, and **Google Gemini**.
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+![LangGraph](https://img.shields.io/badge/LangGraph-Agentic-orange)
+![Qdrant](https://img.shields.io/badge/Qdrant-VectorDB-red)
 
-This agent uses an **Agentic RAG (Retrieval-Augmented Generation)** architecture to solve complex math problems. It intelligently routes queries between a local Knowledge Base (JEE Bench dataset) and Web Search, while strictly enforcing safety guardrails.
+> **An intelligent, Agentic RAG system designed to solve complex mathematical problems by intelligently routing between internal knowledge bases and external web tools.**
 
-![Math Agent Screenshot](https://via.placeholder.com/800x400.png?text=Add+Your+Screenshot+Here)
-*(You can replace this link with a screenshot of your actual app!)*
+![App Screenshot](https://via.placeholder.com/800x400.png?text=Paste+Your+App+Screenshot+Here)
+*(Replace this link with your actual screenshot!)*
 
-## 🌟 Key Features
+## 🧪 Architecture Flow
 
-* **🧠 Agentic Reasoning:** Uses **LangGraph** to create a cyclic graph that decides whether to answer from memory, search the web, or reject the question.
-* **📚 RAG (Retrieval-Augmented Generation):** Connects to a **Qdrant** vector database to retrieve similar math problems for context-aware solving.
-* **🛡️ Robust Guardrails:** Custom logic to block PII (Phone numbers, SSNs) and non-math related questions before they reach the LLM.
-* **🔢 Beautiful Math Rendering:** Frontend uses `KaTeX` to render complex mathematical formulas perfectly.
-* **👍 Human-in-the-Loop:** Integrated feedback mechanism to collect user ratings for future fine-tuning.
+This system utilizes **LangGraph** to manage a cyclic state graph, ensuring robust error handling and intelligent decision-making.
 
-## 🛠️ Tech Stack
+```mermaid
+graph TD
+    A[User Input] --> B{Input Guardrail}
+    B -- PII/Off-topic --> C[Reject Request]
+    B -- Valid Math --> D{Router}
+    D -- Specific/Known --> E[Knowledge Base Retrieval]
+    D -- General/Unknown --> F[Web Search (Tavily)]
+    E & F --> G[Context Injection]
+    G --> H[Gemini Generation]
+    H --> I{Output Guardrail}
+    I -- Safe --> J[React Frontend (LaTeX Render)]
+    I -- Unsafe --> C
 
-* **Backend:** Python 3.11, FastAPI, LangGraph, LangChain
-* **Frontend:** React, Vite, Tailwind CSS (or Custom CSS)
-* **Database:** Qdrant (Vector DB running via Docker)
-* **AI Models:** Google Gemini 1.5 Flash (Reasoning), HuggingFace (Embeddings)
-* **Tools:** Tavily API (Web Search)
-
-## 🚀 Getting Started
-
-### Prerequisites
-* Docker Desktop (for the database)
-* Python 3.11
-* Node.js & npm
-
-### 1. Clone the Repository
-```bash
-git clone [https://github.com/MeghnaB12/agentic-math-solver.git](https://github.com/MeghnaB12/agentic-math-solver.git)
-cd agentic-math-solver
 ```
 
-2. Set up the Database (Qdrant)
+Component,Function
+Input Guardrail,Regex & keyword analysis to block PII and ensure topic relevance.
+Router,Logic layer that determines if the query requires RAG (Qdrant) or Web (Tavily).
+Retrieval,Fetches relevant context to ground the LLM's response.
+Generation,Google Gemini 1.5 Flash synthesizes the context into a step-by-step solution.
+Frontend,React + KaTeX for beautiful mathematical notation rendering.
 
-Make sure Docker is running, then start the container:
+🚀 Getting Started
 
+Prerequisites
 
+* Docker Desktop (Must be running for Qdrant)
+* Python 3.11+
+* Node.js 18+
+
+1. Database Setup
+
+Start the local Vector Database.
+
+```
 docker-compose up -d qdrant
+```
 
+2. Backend Setup
 
-3. Set up the Backend
+Initialize the Python environment and server.
 
+```
 cd backend
 python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
-
-# Install dependencies
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
-# Create .env file with your API keys
+# Create .env file with: GOOGLE_API_KEY, TAVILY_API_KEY
 touch .env
+```
 
-Add your keys to backend/.env:
+Load the Knowledge Base (Run once): This script embeds the dataset and populates the Qdrant collection.
 
-GOOGLE_API_KEY="your_google_key"
-TAVILY_API_KEY="your_tavily_key"
-OPENAI_API_KEY="optional_if_using_openai"
-
-
-Load the Knowledge Base (Run once):
-
-Bash
+```
 python ../notebooks/load_kb.py
-Start the Server:
+```
 
-Bash
+Start the API Server:
+
+```
 uvicorn main:app --reload
-4. Set up the Frontend
+```
 
-Open a new terminal:
+Server runs at: http://127.0.0.1:8000
 
-Bash
+3. Frontend Setup
+
+Launch the React user interface.
+
+```
 cd frontend
 npm install
 npm run dev
-Visit http://localhost:5173 (or the port shown in your terminal) to start chatting!
+```
 
-🧪 Architecture Flow
-Input Guardrail: Checks for PII and topic relevance.
+App runs at: http://localhost:5173
 
-Router: Decides if the question needs the Knowledge Base or Web Search.
+## 🤝 Human-in-the-Loop Feedback
+To improve the agent's performance, user feedback is collected via the UI.
 
-Retrieval: Fetches context from Qdrant (if KB) or Tavily (if Web).
+* Positive/Negative feedback is captured.
+* Data is stored in: data/feedback_dataset.jsonl.
+* This dataset can be used for future DSPy optimization or fine-tuning.
 
-Generation: Google Gemini generates a step-by-step solution.
+## 📂 Repository Structure
 
-Output Guardrail: Ensures the answer is safe and relevant.
+```
 
-Frontend: Renders the solution with LaTeX formatting.
+├── backend/             # FastAPI, LangGraph logic, and Agent definitions
+├── frontend/            # React + Vite application
+├── data/                # Qdrant storage and Feedback logs
+├── notebooks/           # Data loading and experimental scripts
+└── docker-compose.yml   # Infrastructure configuration
+
+```
 
