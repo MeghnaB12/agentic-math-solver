@@ -1,4 +1,4 @@
-# Agentic Math Professor 🧠
+# Agentic Math Solver  🧠
 
 An intelligent AI Math Tutor built with **LangGraph**, **FastAPI**, **React**, and **Google Gemini**.
 
