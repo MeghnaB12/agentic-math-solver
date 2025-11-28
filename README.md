@@ -38,7 +38,7 @@ graph TD
 | **Generation** | **Google Gemini 1.5 Flash** synthesizes the context into a step-by-step solution. |
 | **Frontend** | React + KaTeX for beautiful mathematical notation rendering. |
 
-🚀 Getting Started
+## 🚀 Getting Started
 
 Prerequisites
 
