@@ -1,0 +1,4 @@
+# In .gitignore
+.env
+backend/.env
+backend/venv/
