@@ -22,7 +22,8 @@ graph TD
     B -- Valid Math --> D{Router}
     D -- Specific/Known --> E[Knowledge Base Retrieval]
     D -- General/Unknown --> F[Web Search (Tavily)]
-    E & F --> G[Context Injection]
+    E --> G[Context Injection]
+    F --> G
     G --> H[Gemini Generation]
     H --> I{Output Guardrail}
     I -- Safe --> J[React Frontend (LaTeX Render)]
