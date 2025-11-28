@@ -113,3 +113,12 @@ To improve the agent's performance, user feedback is collected via the UI.
 
 ```
 
+## 🚀 System Capabilities
+
+- [x] **Agentic RAG Architecture** (LangGraph routing)
+- [x] **Knowledge Base** (Qdrant with JEE Bench dataset)
+- [x] **Web Search** (Tavily integration)
+- [x] **Guardrails** (Input/Output filtering for PII and topic)
+- [x] **Human-in-the-Loop** (Feedback collection via React UI)
+- [x] **Application** (FastAPI Backend + React Frontend)
+
